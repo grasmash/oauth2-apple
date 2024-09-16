@@ -199,8 +199,15 @@ class Apple extends AbstractProvider
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if ($response->getStatusCode() >= 400) {
+            $message = $response->getReasonPhrase();
+            if (isset($data['error'])) {
+                $message = $data['error'];
+            }
+            if (isset($data['error_description'])) {
+                $message .= ': ' . $data['error_description'];
+            }
             throw new AppleAccessDeniedException(
-                array_key_exists('error', $data) ? $data['error'] : $response->getReasonPhrase(),
+                $message,
                 array_key_exists('code', $data) ? $data['code'] : $response->getStatusCode(),
                 $response
             );
