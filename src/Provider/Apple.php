@@ -200,10 +200,10 @@ class Apple extends AbstractProvider
     {
         if ($response->getStatusCode() >= 400) {
             $message = $response->getReasonPhrase();
-            if (isset($data['error'])) {
+            if (array_key_exists('error', $data)) {
                 $message = $data['error'];
             }
-            if (isset($data['error_description'])) {
+            if (array_key_exists('error_description', $data)) {
                 $message .= ': ' . $data['error_description'];
             }
             throw new AppleAccessDeniedException(
